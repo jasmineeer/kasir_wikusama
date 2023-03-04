@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // relasi meja -> transaksi (parent -> child)
       // key: id_meja
       // parent: meja, child: transaksi
-      // tipe: 1 meja bisa memiliki banyak menu (one to many)
+      // tipe: 1 meja bisa memiliki banyak transaksi (one to many)
       this.hasMany(models.transaksi, {
         foreignKey: "id_meja",
         as: "transaksi"

@@ -24,6 +24,9 @@ module.exports = {
       harga: {
         type: Sequelize.INTEGER
       },
+      subtotal: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

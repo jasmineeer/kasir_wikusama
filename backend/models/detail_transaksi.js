@@ -13,18 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       // relasi: detail_transaksi -> menu (child -> parent)
-      // key: "id_menu"
-      // parent: menu, child: detail_transaksi
-      // tipe: 1 detail_transaksi mencatat 1 data menu (one to one)
+      // key: id_menu
+      // parent: menu, child: detail_transaksi (ForeignKey: id_menu)
+      // tipe: 1 detail_transaksi mencatat satu data menu (one to one)
       this.belongsTo(models.menu, {
         foreignKey: "id_menu",
         as: "menu"
       })
 
       // relasi: detail_transaksi -> transaksi (child -> parent)
-      // key: "id_transaksi"
-      // parent: transaksi, child: detail_transaksi
-      // tipe: 1 detail_transaksi mencatat i data transaksi (one to one)
+      // key: id_transaksi
+      // parent: transaksi, child: detail_transaksi (ForeignKey: id_transaksi)
+      // tipe: 1 detail_transaksi mencatat satu data transaksi (one to one)
       this.belongsTo(models.transaksi, {
         foreignKey: "id_transaksi",
         as: "transaksi"
@@ -39,7 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     id_transaksi: DataTypes.INTEGER,
     id_menu: DataTypes.INTEGER,
-    harga: DataTypes.INTEGER
+    harga: DataTypes.INTEGER,
+    qty: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'detail_transaksi',

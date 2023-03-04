@@ -21,6 +21,24 @@ exports.getUser = (request, response) => {
     })
 }
 
+exports.findUser = async (request, response) => {
+    let keyword = request.body.keyword 
+    let sequelize = require(`sequelize`)
+    let Op = sequelize.Op 
+
+    let dataUser = await userModel.findAll({
+        where: {
+            [Op.or] : {
+                // username: { [Op.like] : `%${keyword}%` },
+                nama_user: { [Op.like] : `%${`keyword`}%` },
+                username: { [Op.like] : `%${`keyword`}%` },
+                role: { [Op.like] : `%${`keyword`}%` }
+            }
+        }
+    })
+    return response.json(dataUser)
+}
+
 exports.addUser = (request, response) => {
     // Menampung seluruh data user yang diisikan 
     let newUser = {

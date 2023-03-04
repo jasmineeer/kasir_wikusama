@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-
+      
       // relasi: transaksi -> meja (child -> parent)
       // key: id_meja
-      // parent: meja, child: transaksi 
+      // parent: meja, child: transaksi (ForeignKey: id_meja)
       // tipe: 1 transaksi dilakukan oleh 1 meja (one to one)
       this.belongsTo(models.meja, {
         foreignKey: "id_meja",
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // relasi: transaksi -> user (child -> parent)
       // key: id_user
-      // parent: user, child: transaksi
+      // parent: user, child: transaksi (ForeignKey: id_user)
       // tipe: 1 transaksi dicatat oleh 1 user (one to one)
       this.belongsTo(models.user, {
         foreignKey: "id_user",
@@ -32,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
 
       // relasi: transaksi -> detail_transaksi (parent -> child)
       // key: id_transaksi
-      // parent: transaksi, child: detail_transaksi
-      // tipe: 1 transaksi mempunyai banyak detail_transaksi (one to many)
+      // parent: transaksi, child: detail_transaksi (ForeignKey: id_transaksi)
+      // tipe: 1 transaksi memiliki banyak detail_transaksi (one to many)
       this.hasMany(models.detail_transaksi, {
-        foreignKey: "id_transaksi",
+        foreignKey:"id_transaksi",
         as: "detail_transaksi"
       })
     }
@@ -54,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: ['belum_bayar','lunas']
     },
+    total: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'transaksi',

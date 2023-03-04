@@ -12,6 +12,9 @@ app.get("/", userController.getUser)
 // Endpoint Add User
 app.post("/", userController.addUser)
 
+// Endpoint Find User
+app.post("/search", userController.findUser)
+
 // Endpoint Update User
 app.put("/:id_user", userController.updateUser)
 
