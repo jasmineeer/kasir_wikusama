@@ -3,7 +3,7 @@ let jwt = require("jsonwebtoken")
 exports.authorization = (request, response, next) => {
     // Token dikirimkan melalui header 
     let header = request.headers.authorization 
-    let token = header &&.split(" ")[1]
+    let token = header && header.split(" ")[1]
 
     // Apabila token tidak diisi, maka akan muncul pesan unauthorized
     if (token == null) {

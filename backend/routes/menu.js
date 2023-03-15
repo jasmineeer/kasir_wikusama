@@ -6,17 +6,18 @@ app.use(express.json())
 let menuController = require("../controllers/menuController")
 // Memanggil file middlewares
 let uploadImage = require("../middlewares/uploadImage")
+let authorization = require("../middlewares/authorization")
 
 // Endpoint Get Menu
-app.get("/", menuController.getMenu)
+app.get("/", [authorization.authorization], menuController.getMenu)
 
 // Endpoint Add Menu
-app.post("/", uploadImage.upload.single(`gambar`), menuController.addMenu)
+app.post("/", [ uploadImage.upload.single(`gambar`), authorization.authorization], menuController.addMenu)
 
 // Endpoint Update Menu
-app.put("/:id_menu", uploadImage.upload.single(`gambar`), menuController.updateMenu)
+app.put("/:id_menu", [ uploadImage.upload.single(`gambar`), authorization.authorization], menuController.updateMenu)
 
 // Endpoint Delete Menu
-app.delete("/:id_menu", menuController.deleteMenu)
+app.delete("/:id_menu", [authorization.authorization], menuController.deleteMenu)
 
 module.exports = app 

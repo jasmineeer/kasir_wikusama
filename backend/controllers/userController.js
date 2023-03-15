@@ -21,22 +21,45 @@ exports.getUser = (request, response) => {
     })
 }
 
+// exports.findUser = async (request, response) => {
+//     let keyword = request.body.keyword 
+
+//     /** import sequelize operator */
+//     let sequelize = require(`sequelize`)
+//     let Op = sequelize.Op 
+//     /**
+//      * query = select * from user where username like "%keyword%" or
+//      * nama_user like "%keyword%"
+//      */
+
+//     let dataUser = await userModel.findAll({
+//         where: {
+//             [Op.or] : {
+//                 username: { [Op.like] : `%${keyword}%`},
+//                 nama_user: { [Op.like] : `%${keyword}%`},
+//                 role: { [Op.like] : `%${keyword}%`}
+//             }
+//         }
+//     })
+//     return response.json(dataUser)
+// }
+
 exports.findUser = async (request, response) => {
     let keyword = request.body.keyword 
     let sequelize = require(`sequelize`)
     let Op = sequelize.Op 
 
-    let dataUser = await userModel.findAll({
+    let data = await userModel.findAll({
         where: {
             [Op.or] : {
                 // username: { [Op.like] : `%${keyword}%` },
-                nama_user: { [Op.like] : `%${`keyword`}%` },
-                username: { [Op.like] : `%${`keyword`}%` },
-                role: { [Op.like] : `%${`keyword`}%` }
+                nama_user: { [Op.like] : `%${keyword}%` },
+                username: { [Op.like] : `%${keyword}%` },
+                role: { [Op.like] : `%${keyword}%` }
             }
         }
     })
-    return response.json(dataUser)
+    return response.json(data)
 }
 
 exports.addUser = (request, response) => {
@@ -110,4 +133,28 @@ exports.deleteUser = (request, response) => {
             message: error.message 
         })
     })
+}
+
+exports.authentication = async (request, response) => {
+    let dataUser = {
+        username: request.body.username,
+        password: md5(request.body.password)
+    }
+    let result = await userModel.findOne({ where: dataUser})
+
+    if (result) {
+        let payload = JSON.stringify(result)
+        let secretKey = `Cafe Wikusama`
+        let token = jwt.sign(payload, secretKey)
+        return response.json({
+            logged: true,
+            token: token,
+            dataUser: result
+        })
+    } else{
+        return response.json({
+            logged: false,
+            message: `Invalid username or password`
+        })
+    }
 }

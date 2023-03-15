@@ -1,9 +1,14 @@
 const meja = require("../models/meja").meja
+const hakAkses = require("../hakAkses")
 
 // Memanggil file model untuk meja
 let mejaModel = require("../models/index").meja 
 
-exports.getMeja = (request, response) => {
+exports.getMeja = async (request, response) => {
+    let granted = await hakAkses.cashier(request);
+    if (!granted.status) {
+        return response.status(403).json(granted.message);
+    }
     mejaModel.findAll()
     .then(result => {
         return response.json(result)

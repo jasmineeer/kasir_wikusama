@@ -18,7 +18,38 @@ exports.getTransaksi = async (request, response) => {
     return response.json(dataTransaksi)
 }
 
+exports.getTransaksiById = async (request, response) => {
+    let id = request.params.id_transaksi
+    let data = await transaksiModel.findOne({
+        include: ["user", "meja", {
+            model: detailTransaksiModel,
+            as: "detail_transaksi",
+            include: ["menu"]
+        }], where: {
+            id_transaksi: id
+        }
+    })
+    return response.json(data)
+}
 
+exports.findTransaksi = async (request, response) => {
+    let keyword = request.body.keyword 
+    let sequelize = require(`sequelize`)
+    let Op = sequelize.Op 
+
+    let data = await transaksiModel.findAll({
+        where: {
+            [Op.or] : {
+                // tgl_transaksi: { [Op.like] : `%${keyword}%` }
+                id_user: { [Op.like] : `%${keyword}%` },
+                id_meja: { [Op.like] : `%${keyword}%` },
+                nama_pelanggan: { [Op.like] : `%${keyword}%` },
+                status: { [Op.like] : `%${keyword}%` }
+            }
+        }
+    })
+    return response.json(data)
+}
 
 exports.addTransaksi = async (request, response) => {
     // Mendefinisikan menu
@@ -82,18 +113,18 @@ exports.addTransaksi = async (request, response) => {
 }
 
 exports.updateTransaksi = async (request, response) => {
-    let detail = request.body.detail_transaksi
+    let detailtr = request.body.detail_transaksi
     let id = request.params.id_transaksi
     let subtotal = 0
 
-    for (let i = 0; i < detail.length; i++) {
+    for (let i = 0; i < detailtr.length; i++) {
         let menu = await menuModel.findOne({
             where: {
-                id_menu: detail[i].id_menu
+                id_menu: detailtr[i].id_menu
             }
         })
         let hargaMenu = menu.harga
-        detail[i].harga = hargaMenu
+        detailtr[i].harga = hargaMenu
         subtotal += menu.harga * detailtr[i].qty
     }
 
